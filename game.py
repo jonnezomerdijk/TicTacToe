@@ -15,7 +15,6 @@ class Game:
             # otherwise we want to initialize pygame
             pg.init()
             self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-            self.clock = pg.time.Clock()
 
         # initialize the board and AI
         self.board = Board()

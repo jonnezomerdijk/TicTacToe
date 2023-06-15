@@ -9,7 +9,7 @@ from config import *
 def main(sim=False, model=None):
 
     # --- OBJECTS ---
-    game = Game(sim=sim,model=model)
+    game = Game(sim=sim, model=model)
     board = game.board
     ai = game.ai
     ai2 = game.ai2
@@ -23,6 +23,7 @@ def main(sim=False, model=None):
 
     # --- MAINLOOP ---
     while True:
+
         if not game.sim:
             # pg events
             for event in pg.event.get():
@@ -133,4 +134,4 @@ if __name__ == '__main__':
 
     # else, print error
     elif len(sys.argv) > 1:
-        print("you need two arguments to the play script: sim and model")
+        print("you need two arguments to the play the TicTacToe script: sim and model")
