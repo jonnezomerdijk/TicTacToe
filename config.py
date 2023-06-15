@@ -2,8 +2,6 @@
 import pygame as pg
 import numpy as np
 import keras
-
-modelNN = keras.models.load_model('NNwinner')
  
 # storing the winner's value at any instant of code
 winner = draw = None
@@ -48,3 +46,6 @@ field_image = get_scaled_image("images/bkefield.png", res=(WIDTH,HEIGHT))
 x_img = get_scaled_image("images/custom_x.png", res=[SQ_SIZE] * 2)
 o_img = get_scaled_image("images/custom_o.png", res=[SQ_SIZE] * 2)
 font = pg.font.SysFont('Verdana', int(SQ_SIZE // 4), True)
+
+# loading a NN model of choice
+modelNN = keras.models.load_model('NNwinner')

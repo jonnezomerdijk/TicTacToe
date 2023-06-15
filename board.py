@@ -5,7 +5,7 @@ from config import *
 class Board:
 
     def __init__(self):
-        # board settings
+        'board settings'
         self.canvas = new_canvas.copy()
         self.empty_squares = self.canvas
         self.marked_squares = 0
@@ -15,6 +15,7 @@ class Board:
             @return 0 if there is no win yet
             @return 1 if player 1 wins
             @return 2 if player 2 wins
+            if show=True, it will show the winning line
         '''
         # vertical wins
         for y in range(COLS):
@@ -54,13 +55,16 @@ class Board:
         return 0
 
     def mark_square(self, x, y, player):
+        'marks a square on the board'
         self.canvas[x][y] = player
         self.marked_squares += 1
 
     def empty_square(self, x, y):
+        'checks if a square is empty'
         return self.canvas[x][y] == 0
 
     def get_empty_squares(self):
+        'returns a list of empty squares'
         empty_sqrs = []
         for x in range(ROWS):
             for y in range(COLS):
@@ -70,16 +74,21 @@ class Board:
         return empty_sqrs
 
     def isfull(self):
+        'checks if the board is full'
         return self.marked_squares == nSquares
 
     def isempty(self):
+        'checks if the board is empty'
         return self.marked_squares == 0
 
     def show_actualboard(self):
+        'shows the actual board printed in a more readable way'
         current = self.canvas
         self.actual = current.tolist()
+
         for rownr,row in enumerate(self.actual):
             self.actual[rownr] = [" " if col==0 else "X" if col==1 else "O" for col in row]
+        
         print(f'\n{"|".join(self.actual[0])}\n-----\n{"|".join(self.actual[1])}\n-----\n{"|".join(self.actual[2])}\n')
         
         

@@ -6,14 +6,18 @@ from AI import AI
 class Game:
 
     def __init__(self, sim=False, model=None):
+        'game settings'
         self.sim = sim
         if sim:
+            # if simulate we want to save all the moves
             self.history = []
         else:
+            # otherwise we want to initialize pygame
             pg.init()
             self.screen = pg.display.set_mode((WIDTH, HEIGHT))
             self.clock = pg.time.Clock()
 
+        # initialize the board and AI
         self.board = Board()
         self.ai = AI(level=0, player=1)
         self.ai2 = None
@@ -28,14 +32,17 @@ class Game:
             else:
                 self.ai2 = AI(level=2,player=2,model=model)
 
-        self.player = 1          # 1-cross, 2-circles
+        # game variables
+        self.player = 1                              # 1-cross, 2-circles
         self.running = True
-        self.gamemode = 'human' if not sim else 'ai' # 'ai' or 'human'
+        self.gamemode = 'human' if not sim else 'ai' # play against 'ai' or 'human'
         if not sim:
             self.draw_board()
 
+
     # --- DRAW METHODS ---
     def draw_board(self):
+        'draws the board on the screen'
         if ROWS == 3:
             self.screen.blit(field_image, (0, 0))
         else:
@@ -50,6 +57,7 @@ class Game:
                 pg.draw.line(self.screen, LINE_COLOR, (0, SQ_SIZE * (i + 2)), (WIDTH, SQ_SIZE * (i + 2)), LINE_WIDTH)
 
     def draw_fig(self, x, y):
+        'draws the figure on the screen'
         if self.player == 1:
             # draw cross
             self.screen.blit(x_img, vec2(y, x) * SQ_SIZE)
@@ -57,8 +65,10 @@ class Game:
             # draw circle
             self.screen.blit(o_img, vec2(y, x) * SQ_SIZE)
 
+
     # --- OTHER METHODS ---
     def make_move(self, x, y):
+        'makes a move on the board'
         self.board.mark_square(x, y, self.player)
         if self.sim:
             self.history.append((self.player,(x,y)))
@@ -67,18 +77,23 @@ class Game:
         self.next_turn()
 
     def next_turn(self):
+        'changes the player'
         self.player = self.player % 2 + 1
 
     def change_gamemode(self):
-        self.gamemode = 'ai' if self.gamemode == 'pvp' else 'pvp'
+        'changes the gamemode'
+        self.gamemode = 'ai' if self.gamemode == 'human' else 'human'
 
     def isover(self):
+        'checks if the game is over'
+        # check if someone won
         if self.board.check_wins(show=True) != 0:
             if not self.sim:
                 label = font.render(f'{self.board.winner} won!', True, 'white', 'black')
                 self.screen.blit(label, (WIDTH // 2 - label.get_width() // 2, WIDTH // 4))
                 pg.draw.line(self.screen, LINE_COLOR, self.board.iPos, self.board.fPos, LINE_WIDTH)
             return True
+        # check if the board is full and it's a draw
         elif self.board.isfull():
             if not self.sim:
                 label = font.render(f'Draw!', True, 'white', 'black')

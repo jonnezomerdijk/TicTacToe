@@ -5,13 +5,16 @@ import copy
 
 
 class AI:
+
     def __init__(self, level=1, player=2, model=None):
+        # AI settings
         self.level = level
         self.player = player
         self.model = model
     
     # --- RANDOM ---
     def rnd(self, board):
+        'returns a random move'
         empty_sqrs = board.get_empty_squares()
         idx = random.randrange(0, len(empty_sqrs))
 
@@ -19,6 +22,7 @@ class AI:
     
     # --- MINMAX ---
     def minmax(self, board, maximizing):
+        'returns the best move for the minmax AI'
         # which moves are available on the board
         empty_sqrs = board.get_empty_squares()
         best_move = None
@@ -63,6 +67,7 @@ class AI:
 
     # --- NEURAL NETWORK ---
     def neuralnet(self, board, maximizing):
+        'returns the best move for the neuralnet AI'
         # which moves are available on the board
         empty_sqrs = board.get_empty_squares()
         scores = []
@@ -91,6 +96,7 @@ class AI:
 
 
     def eval(self, main_board):
+        'returns the evaluation of the board, resulting in the best move'
         if self.level==0:
             # random choice
             move = self.rnd(main_board)

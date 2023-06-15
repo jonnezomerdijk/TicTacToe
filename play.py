@@ -6,18 +6,20 @@ from game import Game
 from config import *
 
 
-def main(sim=False,model=None):
+def main(sim=False, model=None):
 
     # --- OBJECTS ---
     game = Game(sim=sim,model=model)
     board = game.board
     ai = game.ai
     ai2 = game.ai2
+
     if not sim:
         if ai2 is not None:
             print(f"{game.gamemode} vs. AI level {ai2.level}")
         else:
             print(f"{game.gamemode} vs. {game.gamemode}")
+
 
     # --- MAINLOOP ---
     while True:
@@ -43,9 +45,12 @@ def main(sim=False,model=None):
                     # 0-random ai
                     if event.key == pg.K_0:
                         ai.level = 0
-                    # 1-random ai
+                    # 1-minmax ai
                     if event.key == pg.K_1:
                         ai.level = 1
+                    # 2-nn ai
+                    if event.key == pg.K_2:
+                        ai.level = 2
                         
                 # click event
                 if event.type == pg.MOUSEBUTTONDOWN:
@@ -58,7 +63,7 @@ def main(sim=False,model=None):
                         if game.isover():
                             game.running = False
 
-        # AI initial call
+        # AI initial call, if playing against AI
         if ai is not None:
             if game.gamemode == 'ai' and game.player == ai.player and game.running:
                 # update the screen
@@ -83,7 +88,7 @@ def main(sim=False,model=None):
                     else:
                         return game.result, game.history
         
-        # AI secondary call
+        # AI secondary call, if two AIs are playing
         if ai2 is not None:
             if game.sim or game.player == ai2.player and game.running:
                 # update the screen
@@ -108,13 +113,24 @@ def main(sim=False,model=None):
                     else:
                         return game.result, game.history
 
+        # update the screen
         if not game.sim:
             pg.display.update()
 
 
+# PLAY: Run the main loop
 if __name__ == '__main__':
-    
-    main(
-        sim = False,
-        model = 0
-        )
+
+    # if no arguments, play what is specified here
+    if len(sys.argv) == 1:
+        main(sim = False, model = None)
+
+    # if three arguments, play what is specified in the arguments
+    elif len(sys.argv) == 3:
+        sim = True if sys.argv[1].lower() in ('true','t','1') else False if sys.argv[1] in ('false','f','0') else None
+        model = int(sys.argv[2]) if sys.argv[2].isnumeric() else sys.argv[2]
+        main(sim = sim, model = model)
+
+    # else, print error
+    elif len(sys.argv) > 1:
+        print("you need two arguments to the play script: sim and model")
