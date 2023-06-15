@@ -16,25 +16,39 @@ class Game:
             pg.init()
             self.screen = pg.display.set_mode((WIDTH, HEIGHT))
 
-        # initialize the board and AI
+        # initialize the board
         self.board = Board()
-        self.ai = AI(level=0, player=1)
+
+        # initialize the AI for player 1
+        self.ai = AI(level=0, player=2)
         self.ai2 = None
         
-        if model is not None:
-            if model=='random' or model==0:
-                self.ai2 = AI(level=0,player=2)
-            elif model=='minmax' or model==1:
-                self.ai2 = AI(level=1,player=2)
-            elif model=='nn' or model==2:
-                self.ai2 = AI(level=2,player=2,model=modelNN)
-            else:
-                self.ai2 = AI(level=2,player=2,model=model)
+        # initialize the AI for player 2
+        if sim:
+            if model is not None:
+                if model=='random' or model==0:
+                    self.ai2 = AI(level=0,player=1)
+                elif model=='minmax' or model==1:
+                    self.ai2 = AI(level=1,player=1)
+                elif model=='nn' or model==2:
+                    self.ai2 = AI(level=2,player=1,model=modelNN)
+                else:
+                    self.ai2 = AI(level=2,player=1,model=model)
+        else:
+            if model is not None:
+                if model=='random' or model==0:
+                    self.ai = AI(level=0,player=2)
+                elif model=='minmax' or model==1:
+                    self.ai = AI(level=1,player=2)
+                elif model=='nn' or model==2:
+                    self.ai = AI(level=2,player=2,model=modelNN)
+                else:
+                    self.ai = AI(level=2,player=2,model=model)
 
         # game variables
-        self.player = 1                              # 1-cross, 2-circles
+        self.player = 1                                            # 1-cross, 2-circles
         self.running = True
-        self.gamemode = 'human' if not sim else 'ai' # play against 'ai' or 'human'
+        self.gamemode = 'human' if not sim and not model else 'ai' # play against 'ai' or 'human'
         if not sim:
             self.draw_board()
 
@@ -100,5 +114,5 @@ class Game:
             return True
 
     def reset(self):
-        self.__init__()
+        self.__init__(sim=self.sim, model=self.ai.model)
         

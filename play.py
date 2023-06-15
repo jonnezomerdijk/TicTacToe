@@ -15,10 +15,9 @@ def main(sim=False, model=None):
     ai2 = game.ai2
 
     if not sim:
-        if ai2 is not None:
-            print(f"{game.gamemode} vs. AI level {ai2.level}")
-        else:
-            print(f"{game.gamemode} vs. {game.gamemode}")
+        p1 = 'human'
+        p2 = 'human' if not model else f'AI level {ai.level}'
+        print(f"{p1} vs. {p2}")
 
 
     # --- MAINLOOP ---
@@ -35,23 +34,35 @@ def main(sim=False, model=None):
 
                 # keydown event
                 if event.type == pg.KEYDOWN:
-                    # g-gamemode
+                     # q/ESC: quit
+                    if event.key in (pg.K_q, pg.K_ESCAPE):
+                        pg.quit()
+                        sys.exit()
+                    # g: change gamemode (human/ai)
                     if event.key == pg.K_g:
                         game.change_gamemode()
-                    # r-restart
+                        print(f"gamemode changed to {game.gamemode.upper()} {f'level {ai.level}' if game.gamemode!='human' else ''}")
+                    # r: restart
                     if event.key == pg.K_r:
                         game.reset()
                         board = game.board
                         ai = game.ai
-                    # 0-random ai
+                        ai2 = game.ai2
+                    # 0: change to random ai
                     if event.key == pg.K_0:
+                        game.gamemode = 'ai'
                         ai.level = 0
-                    # 1-minmax ai
+                        print(f"gamemode changed to AI level {ai.level}")
+                    # 1: change to minmax ai
                     if event.key == pg.K_1:
+                        game.gamemode = 'ai'
                         ai.level = 1
-                    # 2-nn ai
+                        print(f"gamemode changed to AI level {ai.level}")
+                    # 2: change to nn ai
                     if event.key == pg.K_2:
+                        game.gamemode = 'ai'
                         ai.level = 2
+                        print(f"gamemode changed to AI level {ai.level}")
                         
                 # click event
                 if event.type == pg.MOUSEBUTTONDOWN:

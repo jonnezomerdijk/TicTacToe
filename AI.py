@@ -1,16 +1,18 @@
 import pygame as pg
 import numpy as np
 import random
+from config import *
 import copy
 
 
 class AI:
 
     def __init__(self, level=1, player=2, model=None):
+        global modelNN
         # AI settings
         self.level = level
         self.player = player
-        self.model = model
+        self.model = model if model is not None else modelNN
     
     # --- RANDOM ---
     def rnd(self, board):
@@ -102,9 +104,15 @@ class AI:
             move = self.rnd(main_board)
         elif self.level==1:
             # minmax algo choice
-            eval, move = self.minmax(main_board,maximizing=False)
+            if self.player==1:
+                eval, move = self.minmax(main_board,maximizing=True)
+            elif self.player==2:
+                eval, move = self.minmax(main_board,maximizing=False)
         elif self.level==2:
             # neuralnet algo choice
-            eval, move = self.neuralnet(main_board,maximizing=False)
+            if self.player==1:
+                eval, move = self.neuralnet(main_board,maximizing=True)
+            elif self.player==2:
+                eval, move = self.neuralnet(main_board,maximizing=False)
         
         return move
